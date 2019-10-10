@@ -450,7 +450,7 @@ public class SolutionGenerator {
 		}
 		builder.append("*/");
 		builder.append("public class ").append(task.mainClass).append(" {\n");
-		builder.append("\tpublic static void main(String[] args) {\n");
+		builder.append("\tpublic static void main(String[] args) throws InterruptedException {\n");
 		if (task.includeLocale) {
 			builder.append("\t\tLocale.setDefault(Locale.US);\n");
 		}
