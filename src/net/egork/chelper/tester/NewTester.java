@@ -227,6 +227,7 @@ public class NewTester {
         long time = System.currentTimeMillis();
         try {
             run(in, out, taskClass, readerClass, writerClass, testType);
+            out.getClass().getMethod("close").invoke(out);
             time = System.currentTimeMillis() - time;
             maximalTime = Math.max(time, maximalTime);
             String result = writer.getBuffer().toString();
