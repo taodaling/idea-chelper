@@ -65,10 +65,10 @@ public class Task {
 				@JsonProperty("failOnOverflow") boolean failOnOverflow,
 				@JsonProperty("interactive") boolean interactive,
 				@JsonProperty("interactor") String interactor,
-				@JsonProperty("newThread") String newThread) {
+				@JsonProperty("newThread") boolean newThread) {
 		this(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
 			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, null, interactive, interactor,  newThread);
+			failOnOverflow, null, interactive, interactor, newThread);
 	}
 
     public Task(String name, TestType testType, StreamConfiguration input, StreamConfiguration output, Test[] tests,
@@ -86,7 +86,7 @@ public class Task {
                 String inputClass, String outputClass, boolean includeLocale, boolean failOnOverflow, String template) {
         this(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
                 checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-                failOnOverflow, template, false, null);
+                failOnOverflow, template, false, null, true);
     }
 
 	public Task(String name, TestType testType, StreamConfiguration input, StreamConfiguration output, Test[] tests,
