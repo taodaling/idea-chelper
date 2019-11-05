@@ -53,6 +53,7 @@ public class TaskConfigurationPanel extends JPanel {
     private JPanel interactorSettings;
     private JCheckBox isInteractive;
     private SelectOrCreateClass interactor;
+    private JCheckBox newThread;
 
     public TaskConfigurationPanel(final Task task, boolean isNewTask, final Project project, final SizeChangeListener listener, JPanel buttonPanel) {
         super(new BorderLayout(5, 5));
@@ -97,6 +98,8 @@ public class TaskConfigurationPanel extends JPanel {
         basic.add(contestName);
         isInteractive = new JCheckBox("Interactive task", task.interactive);
         basic.add(isInteractive);
+        newThread = new JCheckBox("New thread", task.newThread);
+        basic.add(newThread);
         testInputOutputParameters = new JPanel(new VerticalFlowLayout(0, 5));
         testInputOutputParameters.add(new JLabel("Test type:"));
         testType = new ComboBox<>(TestType.values());
@@ -295,7 +298,8 @@ public class TaskConfigurationPanel extends JPanel {
                 task.tests, location.getText(), vmArgs.getText(), mainClass.getText(),
                 taskClass.getText(), checkerClass.getText(), checkerParameters.getText(), getTestClass(),
                 date.getText(), contestName.getText(), truncate.isSelected(), task.inputClass, task.outputClass,
-                includeLocale.isSelected(), failOnOverflow.isSelected(), template.getText(), isInteractive.isSelected(), interactor.getText());
+                includeLocale.isSelected(), failOnOverflow.isSelected(), template.getText(), isInteractive.isSelected(), interactor.getText(),
+            	newThread.isSelected());
     }
 
     private String[] getTestClass() {
