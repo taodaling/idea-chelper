@@ -459,7 +459,7 @@ public class SolutionGenerator {
 		builder.append("\tpublic static void main(String[] args) throws Exception {\n");
 
 		if (task.newThread) {
-			builder.append("\t\tThread thread = new Thread(null, new TaskAdapter(), \"" + author + "\", 1 << 27);\n" +
+			builder.append("\t\tThread thread = new Thread(null, new TaskAdapter(), \"" + author + "\", 1 << 29);\n" +
 				"\t\tthread.start();\n" +
 				"\t\tthread.join();\n");
 		} else {
