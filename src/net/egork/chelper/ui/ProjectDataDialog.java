@@ -27,6 +27,7 @@ public class ProjectDataDialog extends JDialog {
     private final ClassSelector outputClass;
     private final JTextField excludePackages;
     private final JTextField author;
+    private final JTextField virtualMachineArgument;;
     private final JLabel testDirectoryLabel;
     private final int width = new JTextField(20).getPreferredSize().width;
 
@@ -45,6 +46,7 @@ public class ProjectDataDialog extends JDialog {
         outputClass = new ClassSelector(data.outputClass, project);
         excludePackages = new JTextField(ProjectData.join(data.excludedPackages));
         author = new JTextField(data.author);
+        virtualMachineArgument = new JTextField(data.virtualMachineArguments);
         smartTesting = new JCheckBox("Use smart testing", data.smartTesting);
         OkCancelPanel main = new OkCancelPanel(new VerticalFlowLayout()) {
             @Override
@@ -88,6 +90,8 @@ public class ProjectDataDialog extends JDialog {
         main.add(excludePackages);
         main.add(new JLabel("Author:"));
         main.add(author);
+        main.add(new JLabel("VM arguments:"));
+        main.add(virtualMachineArgument);
         main.add(failOnIntegerOverflowForNewTasks);
         main.add(smartTesting);
         main.add(okCancelPanel);
@@ -108,7 +112,8 @@ public class ProjectDataDialog extends JDialog {
     }
 
     private void onChange() {
-        data = new ProjectData(inputClass.getText(), outputClass.getText(), excludePackages.getText().split(","), outputDirectory.getText(), author.getText(), archiveDirectory.getText(), defaultDirectory.getText(), testDirectory.getText(), enableUnitTests.isSelected(), failOnIntegerOverflowForNewTasks.isSelected(), ProjectData.CURRENT_LIBRARY_VERSION, smartTesting.isSelected(), true);
+        data = new ProjectData(inputClass.getText(), outputClass.getText(), excludePackages.getText().split(","), outputDirectory.getText(), author.getText(), archiveDirectory.getText(), defaultDirectory.getText(), testDirectory.getText(), enableUnitTests.isSelected(), failOnIntegerOverflowForNewTasks.isSelected(), ProjectData.CURRENT_LIBRARY_VERSION, smartTesting.isSelected(), true,
+                virtualMachineArgument.getText());
     }
 
     @Override

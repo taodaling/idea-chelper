@@ -16,6 +16,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import net.egork.chelper.ProjectData;
 import net.egork.chelper.actions.TopCoderAction;
 import net.egork.chelper.task.Task;
 import net.egork.chelper.ui.TaskConfigurationEditor;
@@ -82,8 +83,19 @@ public class TaskConfiguration extends ModuleBasedConfiguration<JavaRunConfigura
                 parameters.setWorkingDirectory(getProject().getBaseDir().getPath());
                 parameters.setMainClass("net.egork.chelper.tester.NewTester");
                 String[] vmParameters = configuration.vmArgs.split(" ");
+
+                ProjectData projectData = Utilities.getData(getProject());
+
                 for (String parameter : vmParameters)
                     parameters.getVMParametersList().add(parameter);
+
+                //support global virtual machine parameter
+                for (String parameter : projectData.virtualMachineArguments.split(" ")) {
+                    if (parameter.isEmpty()) {
+                        continue;
+                    }
+                    parameters.getVMParametersList().add(parameter);
+                }
                 if (configuration.failOnOverflow) {
                     String path = TopCoderAction.getJarPathForClass(com.github.cojac.CojacAgent.class);
                     parameters.getVMParametersList().add("-javaagent:" + path + "=-Cints -Clongs -Ccasts -Cmath -Xb com.fasterxml.jackson.");

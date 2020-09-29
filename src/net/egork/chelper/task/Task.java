@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.egork.chelper.util.InputReader;
 import net.egork.chelper.util.OutputWriter;
+import net.egork.chelper.util.Utilities;
 
 import java.util.Calendar;
 import java.util.InputMismatchException;
@@ -24,52 +25,52 @@ public class Task {
     @JsonIgnore
     public final String template;
 
-	//Advanced
-	public final String location;
-	public final String vmArgs;
-	public final String mainClass;
-	public final String taskClass;
-	public final String checkerClass;
-	public final String checkerParameters;
-	public final String[] testClasses;
-	public final String date;
-	public final String contestName;
-	public final boolean truncate;
-	public final String inputClass;
-	public final String outputClass;
-	public final boolean includeLocale;
-	public final boolean failOnOverflow;
-	public final boolean interactive;
-	public final String interactor;
-	public final boolean newThread;
+    //Advanced
+    public final String location;
+    public final String vmArgs;
+    public final String mainClass;
+    public final String taskClass;
+    public final String checkerClass;
+    public final String checkerParameters;
+    public final String[] testClasses;
+    public final String date;
+    public final String contestName;
+    public final boolean truncate;
+    public final String inputClass;
+    public final String outputClass;
+    public final boolean includeLocale;
+    public final boolean failOnOverflow;
+    public final boolean interactive;
+    public final String interactor;
+    public final boolean newThread;
 
-	@JsonCreator
-	public Task(@JsonProperty("name") String name,
-				@JsonProperty("testType") TestType testType,
-				@JsonProperty("input") StreamConfiguration input,
-				@JsonProperty("output") StreamConfiguration output,
-				@JsonProperty("tests") Test[] tests,
-				@JsonProperty("location") String location,
-				@JsonProperty("vmArgs") String vmArgs,
-				@JsonProperty("mainClass") String mainClass,
-				@JsonProperty("taskClass") String taskClass,
-				@JsonProperty("checkerClass") String checkerClass,
-				@JsonProperty("checkerParameters") String checkerParameters,
-				@JsonProperty("testClasses") String[] testClasses,
-				@JsonProperty("date") String date,
-				@JsonProperty("contestName") String contestName,
-				@JsonProperty("truncate") boolean truncate,
-				@JsonProperty("inputClass") String inputClass,
-				@JsonProperty("outputClass") String outputClass,
-				@JsonProperty("includeLocale") boolean includeLocale,
-				@JsonProperty("failOnOverflow") boolean failOnOverflow,
-				@JsonProperty("interactive") boolean interactive,
-				@JsonProperty("interactor") String interactor,
-				@JsonProperty("newThread") boolean newThread) {
-		this(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, null, interactive, interactor, newThread);
-	}
+    @JsonCreator
+    public Task(@JsonProperty("name") String name,
+                @JsonProperty("testType") TestType testType,
+                @JsonProperty("input") StreamConfiguration input,
+                @JsonProperty("output") StreamConfiguration output,
+                @JsonProperty("tests") Test[] tests,
+                @JsonProperty("location") String location,
+                @JsonProperty("vmArgs") String vmArgs,
+                @JsonProperty("mainClass") String mainClass,
+                @JsonProperty("taskClass") String taskClass,
+                @JsonProperty("checkerClass") String checkerClass,
+                @JsonProperty("checkerParameters") String checkerParameters,
+                @JsonProperty("testClasses") String[] testClasses,
+                @JsonProperty("date") String date,
+                @JsonProperty("contestName") String contestName,
+                @JsonProperty("truncate") boolean truncate,
+                @JsonProperty("inputClass") String inputClass,
+                @JsonProperty("outputClass") String outputClass,
+                @JsonProperty("includeLocale") boolean includeLocale,
+                @JsonProperty("failOnOverflow") boolean failOnOverflow,
+                @JsonProperty("interactive") boolean interactive,
+                @JsonProperty("interactor") String interactor,
+                @JsonProperty("newThread") boolean newThread) {
+        this(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, null, interactive, interactor, newThread);
+    }
 
     public Task(String name, TestType testType, StreamConfiguration input, StreamConfiguration output, Test[] tests,
                 String location, String vmArgs, String mainClass, String taskClass, String checkerClass,
@@ -89,42 +90,42 @@ public class Task {
                 failOnOverflow, template, false, null, true);
     }
 
-	public Task(String name, TestType testType, StreamConfiguration input, StreamConfiguration output, Test[] tests,
-				String location, String vmArgs, String mainClass, String taskClass, String checkerClass,
-				String checkerParameters, String[] testClasses, String date, String contestName, boolean truncate,
-				String inputClass, String outputClass, boolean includeLocale, boolean failOnOverflow, String template,
-				boolean interactive, String interactor, boolean newThread) {
-		this.name = trim(name);
-		this.testType = testType;
-		this.input = input;
-		this.output = output;
-		this.tests = tests;
-		this.location = trim(location);
-		this.vmArgs = trim(vmArgs);
-		this.mainClass = trim(mainClass);
-		this.taskClass = trim(taskClass);
-		this.checkerClass = trim(checkerClass);
-		this.checkerParameters = trim(checkerParameters);
-		this.testClasses = testClasses;
-		this.date = trim(date);
-		this.contestName = trim(contestName);
-		this.truncate = truncate;
-		this.inputClass = trim(inputClass);
-		this.outputClass = trim(outputClass);
-		this.includeLocale = includeLocale;
-		this.failOnOverflow = failOnOverflow;
-		this.template = template;
-		this.newThread = newThread;
-		if (tests != null) {
-			for (int i = 0; i < tests.length; i++) {
-				if (tests[i].index != i) {
-					tests[i] = new Test(tests[i].input, tests[i].output, i, tests[i].active);
-				}
-			}
-		}
-		this.interactive = interactive;
-		this.interactor = interactive && interactor == null ? "net.egork.chelper.tester.Interactor" : interactor;
-	}
+    public Task(String name, TestType testType, StreamConfiguration input, StreamConfiguration output, Test[] tests,
+                String location, String vmArgs, String mainClass, String taskClass, String checkerClass,
+                String checkerParameters, String[] testClasses, String date, String contestName, boolean truncate,
+                String inputClass, String outputClass, boolean includeLocale, boolean failOnOverflow, String template,
+                boolean interactive, String interactor, boolean newThread) {
+        this.name = trim(name);
+        this.testType = testType;
+        this.input = input;
+        this.output = output;
+        this.tests = tests;
+        this.location = trim(location);
+        this.vmArgs = trim(vmArgs);
+        this.mainClass = trim(mainClass);
+        this.taskClass = trim(taskClass);
+        this.checkerClass = trim(checkerClass);
+        this.checkerParameters = trim(checkerParameters);
+        this.testClasses = testClasses;
+        this.date = trim(date);
+        this.contestName = trim(contestName);
+        this.truncate = truncate;
+        this.inputClass = trim(inputClass);
+        this.outputClass = trim(outputClass);
+        this.includeLocale = includeLocale;
+        this.failOnOverflow = failOnOverflow;
+        this.template = template;
+        this.newThread = newThread;
+        if (tests != null) {
+            for (int i = 0; i < tests.length; i++) {
+                if (tests[i].index != i) {
+                    tests[i] = new Test(tests[i].input, tests[i].output, i, tests[i].active);
+                }
+            }
+        }
+        this.interactive = interactive;
+        this.interactor = interactive && interactor == null ? "net.egork.chelper.tester.Interactor" : interactor;
+    }
 
     private static String trim(String s) {
         if (s == null) {
@@ -220,29 +221,29 @@ public class Task {
                 outputClass, includeLocale, failOnOverflow);
     }
 
-	public Task setTests(Test[] tests) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setTests(Test[] tests) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setTestClasses(String[] testClasses) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setTestClasses(String[] testClasses) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setTaskClass(String taskClass) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setTaskClass(String taskClass) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setCheckerClass(String checkerClass) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setCheckerClass(String checkerClass) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
     public Task setInteractor(String interactor) {
         return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
@@ -256,51 +257,51 @@ public class Task {
                 failOnOverflow, template, interactive, interactor, newThread);
     }
 
-	public Task setTestType(TestType testType) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setTestType(TestType testType) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setContestName(String contestName) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setContestName(String contestName) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setName(String name) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setName(String name) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setFailOnIntegerOverflow(boolean failOnOverflow) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setFailOnIntegerOverflow(boolean failOnOverflow) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setDate(String date) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setDate(String date) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setInputOutputClasses(String inputClass, String outputClass) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setInputOutputClasses(String inputClass, String outputClass) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setTemplate(String template) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setTemplate(String template) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 
-	public Task setNewThread(boolean newThread) {
-		return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
-			checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
-			failOnOverflow, template, interactive, interactor, newThread);
-	}
+    public Task setNewThread(boolean newThread) {
+        return new Task(name, testType, input, output, tests, location, vmArgs, mainClass, taskClass, checkerClass,
+                checkerParameters, testClasses, date, contestName, truncate, inputClass, outputClass, includeLocale,
+                failOnOverflow, template, interactive, interactor, newThread);
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Properties;
 public class ProjectData {
     public static final ProjectData DEFAULT = new ProjectData(
             "java.util.Scanner", "java.io.PrintWriter", "java.,javax.,com.sun.".split(","), "output", "",
-            "archive/unsorted", "main", "lib/test", false, false, 0, true, false);
+            "archive/unsorted", "main", "lib/test", false, false, 0, true, false, "");
     public static final int CURRENT_LIBRARY_VERSION = 2;
 
     public final String inputClass;
@@ -32,8 +32,10 @@ public class ProjectData {
     public final int libraryVersion;
     public final boolean smartTesting;
     public final boolean extensionProposed;
+    public final String virtualMachineArguments;
 
-    public ProjectData(String inputClass, String outputClass, String[] excludedPackages, String outputDirectory, String author, String archiveDirectory, String defaultDirectory, String testDirectory, boolean enableUnitTests, boolean failOnIntegerOverflowForNewTasks, int libraryVersion, boolean smartTesting, boolean extensionProposed) {
+    public ProjectData(String inputClass, String outputClass, String[] excludedPackages, String outputDirectory, String author, String archiveDirectory, String defaultDirectory, String testDirectory, boolean enableUnitTests, boolean failOnIntegerOverflowForNewTasks, int libraryVersion, boolean smartTesting, boolean extensionProposed,
+                       String virtualMachineArguments) {
         this.extensionProposed = extensionProposed;
         this.inputClass = inputClass.trim();
         this.outputClass = outputClass.trim();
@@ -47,6 +49,7 @@ public class ProjectData {
         this.failOnIntegerOverflowForNewTasks = failOnIntegerOverflowForNewTasks;
         this.libraryVersion = libraryVersion;
         this.smartTesting = smartTesting;
+        this.virtualMachineArguments = virtualMachineArguments;
     }
 
     public ProjectData(Properties properties) {
@@ -64,6 +67,7 @@ public class ProjectData {
                 Boolean.valueOf(properties.getProperty("libraryMigrated", "false")) ? "1" : "0"));
         smartTesting = Boolean.valueOf(properties.getProperty("smartTesting", Boolean.toString(DEFAULT.smartTesting)));
         extensionProposed = Boolean.valueOf(properties.getProperty("extensionProposed", Boolean.toString(DEFAULT.extensionProposed)));
+        virtualMachineArguments = properties.getProperty("virtualMachineArguments", "");
     }
 
     public static ProjectData load(Project project) {
@@ -111,6 +115,7 @@ public class ProjectData {
                     properties.setProperty("libraryVersion", Integer.toString(libraryVersion));
                     properties.setProperty("smartTesting", Boolean.toString(smartTesting));
                     properties.setProperty("extensionProposed", Boolean.toString(extensionProposed));
+                    properties.setProperty("virtualMachineArguments", virtualMachineArguments);
                     OutputStream outputStream = config.getOutputStream(null);
                     properties.store(outputStream, "");
                     outputStream.close();
@@ -134,14 +139,16 @@ public class ProjectData {
 
     public void completeMigration(Project project) {
         ProjectData newData = new ProjectData(inputClass, outputClass, excludedPackages, outputDirectory, author,
-                archiveDirectory, defaultDirectory, testDirectory, enableUnitTests, failOnIntegerOverflowForNewTasks, CURRENT_LIBRARY_VERSION, smartTesting, extensionProposed);
+                archiveDirectory, defaultDirectory, testDirectory, enableUnitTests, failOnIntegerOverflowForNewTasks, CURRENT_LIBRARY_VERSION, smartTesting, extensionProposed,
+                virtualMachineArguments);
         newData.save(project);
         Utilities.addProjectData(project, newData);
     }
 
     public void completeExtensionProposal(Project project) {
         ProjectData newData = new ProjectData(inputClass, outputClass, excludedPackages, outputDirectory, author,
-                archiveDirectory, defaultDirectory, testDirectory, enableUnitTests, failOnIntegerOverflowForNewTasks, libraryVersion, smartTesting, true);
+                archiveDirectory, defaultDirectory, testDirectory, enableUnitTests, failOnIntegerOverflowForNewTasks, libraryVersion, smartTesting, true,
+                virtualMachineArguments);
         newData.save(project);
         Utilities.addProjectData(project, newData);
     }
