@@ -3,6 +3,7 @@ package net.egork.chelper.util;
 import javax.net.ssl.*;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 /**
@@ -18,13 +19,13 @@ public final class SSLUtils {
      *
      * @deprecated see {@link #_hostnameVerifier}.
      */
-    private static com.sun.net.ssl.HostnameVerifier __hostnameVerifier;
+    private static HostnameVerifier __hostnameVerifier;
     /**
      * Thrust managers for the Sun's deprecated API.
      *
      * @deprecated see {@link #_trustManagers}.
      */
-    private static com.sun.net.ssl.TrustManager[] __trustManagers;
+    private static TrustManager[] __trustManagers;
     /**
      * Hostname verifier.
      */
@@ -48,7 +49,7 @@ public final class SSLUtils {
             __hostnameVerifier = new _FakeHostnameVerifier();
         } // if
         // Install the all-trusting host name verifier
-        com.sun.net.ssl.HttpsURLConnection.
+        HttpsURLConnection.
                 setDefaultHostnameVerifier(__hostnameVerifier);
     } // __trustAllHttpsCertificates
 
@@ -60,21 +61,21 @@ public final class SSLUtils {
      * @deprecated see {@link #_trustAllHttpsCertificates()}.
      */
     private static void __trustAllHttpsCertificates() {
-        com.sun.net.ssl.SSLContext context;
+        SSLContext context;
 
         // Create a trust manager that does not validate certificate chains
         if (__trustManagers == null) {
-            __trustManagers = new com.sun.net.ssl.TrustManager[]
+            __trustManagers = new TrustManager[]
                     {new _FakeX509TrustManager()};
         } // if
         // Install the all-trusting trust manager
         try {
-            context = com.sun.net.ssl.SSLContext.getInstance("SSL");
+            context = SSLContext.getInstance("SSL");
             context.init(null, __trustManagers, new SecureRandom());
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException(gse.getMessage());
         } // catch
-        com.sun.net.ssl.HttpsURLConnection.
+        HttpsURLConnection.
                 setDefaultSSLSocketFactory(context.getSocketFactory());
     } // __trustAllHttpsCertificates
 
@@ -160,10 +161,9 @@ public final class SSLUtils {
      * ssl package.
      *
      * @author Francis Labrie
-     * @deprecated see {@link SSLUtilities.FakeHostnameVerifier}.
      */
     public static class _FakeHostnameVerifier
-            implements com.sun.net.ssl.HostnameVerifier {
+            implements HostnameVerifier {
 
         /**
          * Always return true, indicating that the host name is an
@@ -175,9 +175,10 @@ public final class SSLUtils {
          * @return the true boolean value
          * indicating the host name is trusted.
          */
-        public boolean verify(String hostname, String session) {
-            return (true);
-        } // verify
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
     } // _FakeHostnameVerifier
 
 
@@ -188,10 +189,9 @@ public final class SSLUtils {
      * package.
      *
      * @author Francis Labrie
-     * @deprecated see {@link SSLUtilities.FakeX509TrustManager}.
      */
     public static class _FakeX509TrustManager
-            implements com.sun.net.ssl.X509TrustManager {
+            implements X509TrustManager {
 
         /**
          * Empty array of certificate authority certificates.
@@ -200,29 +200,13 @@ public final class SSLUtils {
                 new X509Certificate[]{};
 
 
-        /**
-         * Always return true, trusting for client SSL
-         * chain peer certificate chain.
-         *
-         * @param chain the peer certificate chain.
-         * @return the true boolean value
-         * indicating the chain is trusted.
-         */
-        public boolean isClientTrusted(X509Certificate[] chain) {
-            return (true);
-        } // checkClientTrusted
+        @Override
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+        }
 
-        /**
-         * Always return true, trusting for server SSL
-         * chain peer certificate chain.
-         *
-         * @param chain the peer certificate chain.
-         * @return the true boolean value
-         * indicating the chain is trusted.
-         */
-        public boolean isServerTrusted(X509Certificate[] chain) {
-            return (true);
-        } // checkServerTrusted
+        @Override
+        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+        }
 
         /**
          * Return an empty array of certificate authority certificates which

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/idea-chelper.iml" filepath="$PROJECT_DIR$/idea-chelper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chelper.iml" filepath="$PROJECT_DIR$/chelper.iml" />
     </modules>
   </component>
 </project>
