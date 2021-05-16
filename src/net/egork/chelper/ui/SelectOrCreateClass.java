@@ -15,44 +15,54 @@ import java.awt.event.ActionListener;
  * @author Egor Kulikov (egorku@yandex-team.ru)
  */
 public class SelectOrCreateClass extends JPanel {
-    private final ClassSelector classSelector;
-    private final JButton create;
+	private final ClassSelector classSelector;
+	private final JButton create;
+	private String defaultClassName;
 
-    public SelectOrCreateClass(String initialValue, final Project project, final Provider<String> locationProvider,
-                               final FileCreator fileCreator) {
-        super(new BorderLayout());
-        classSelector = new ClassSelector(initialValue, project);
-        create = new JButton("Create");
-        create.setEnabled(fileCreator.isValid(initialValue));
-        classSelector.addDocumentListener(new DocumentListener() {
-            public void beforeDocumentChange(DocumentEvent event) {
-            }
+	public SelectOrCreateClass(String initialValue, final Project project, final Provider<String> locationProvider, final FileCreator fileCreator) {
+		this(initialValue, project, locationProvider, fileCreator, null);
+	}
 
-            public void documentChanged(DocumentEvent event) {
-                create.setEnabled(fileCreator.isValid(classSelector.getText()));
-            }
-        });
-        create.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                classSelector.setText(fileCreator.createFile(project, locationProvider.provide(), classSelector.getText()));
-            }
-        });
-        add(classSelector, BorderLayout.CENTER);
-        add(create, BorderLayout.EAST);
-    }
+	public SelectOrCreateClass(String initialValue, final Project project, final Provider<String> locationProvider,
+							   final FileCreator fileCreator, String defaultClassName) {
+		super(new BorderLayout());
+		this.defaultClassName = defaultClassName;
+		classSelector = new ClassSelector(initialValue, project);
+		create = new JButton("Create");
+		create.setEnabled(fileCreator.isValid(initialValue));
+		classSelector.addDocumentListener(new DocumentListener() {
+			public void beforeDocumentChange(DocumentEvent event) {
+			}
 
-    public String getText() {
-        return classSelector.getText();
-    }
+			public void documentChanged(DocumentEvent event) {
+				create.setEnabled(fileCreator.isValid(classSelector.getText()));
+			}
+		});
+		create.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				classSelector.setText(fileCreator.createFile(project, locationProvider.provide(), classSelector.getText()));
+			}
+		});
+		add(classSelector, BorderLayout.CENTER);
+		add(create, BorderLayout.EAST);
+	}
 
-    public void setText(String text) {
-        classSelector.setText(text);
-    }
+	public String getText() {
+		String res = classSelector.getText();
+		if (res.isEmpty() && defaultClassName != null) {
+			res = defaultClassName;
+		}
+		return res;
+	}
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        classSelector.setEnabled(enabled);
-        create.setEnabled(enabled);
-    }
+	public void setText(String text) {
+		classSelector.setText(text);
+	}
+
+	@Override
+	public void setEnabled(boolean enabled) {
+		super.setEnabled(enabled);
+		classSelector.setEnabled(enabled);
+		create.setEnabled(enabled);
+	}
 }

@@ -146,7 +146,8 @@ public class TaskConfigurationPanel extends JPanel {
                 return location.getText();
             }
         };
-        interactor = new SelectOrCreateClass(task.interactor != null ? task.interactor : "net.egork.chelper.tester.Interactor", project, locationProvider, new FileCreator() {
+        //"" is empty string too
+        interactor = new SelectOrCreateClass(task.interactor != null && !task.interactor.isEmpty() ? task.interactor : "net.egork.chelper.tester.Interactor", project, locationProvider, new FileCreator() {
             @Override
             public String createFile(Project project, String path, String name) {
                 return FileUtilities.createInteractorClass(project, path, name, task);
@@ -156,7 +157,7 @@ public class TaskConfigurationPanel extends JPanel {
             public boolean isValid(String name) {
                 return FileUtilities.isValidClassName(name);
             }
-        });
+        }, "net.egork.chelper.tester.Interactor");
         interactorSettings.add(interactor);
         interactorSettings.setVisible(task.interactive);
         basic.add(interactorSettings);

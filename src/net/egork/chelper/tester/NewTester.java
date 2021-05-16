@@ -175,7 +175,6 @@ public class NewTester {
         Object in = readerClass.getConstructor(InputStream.class).newInstance(interactorToSolutionInputStream);
         Object out = writerClass.getConstructor(OutputStream.class).newInstance(solutionToInteractorOutputStream);
         Object interactor = interactorClass.newInstance();
-        Object solution = taskClass.newInstance();
         InputStream input = new StringInputStream(test.input);
         System.out.println("Input:");
         print(test.input, truncate);
@@ -188,7 +187,8 @@ public class NewTester {
             @Override
             public void run() {
                 try {
-                    taskClass.getMethod("solve", int.class, readerClass, writerClass).invoke(solution, 1, in, out);
+                    //same way with consistent logic
+                    NewTester.run(in, out, taskClass, readerClass, writerClass, task.testType);
                 } catch (Throwable e) {
                     lastException = e;
                 }
@@ -227,7 +227,6 @@ public class NewTester {
         long time = System.currentTimeMillis();
         try {
             run(in, out, taskClass, readerClass, writerClass, testType);
-            out.getClass().getMethod("close").invoke(out);
             time = System.currentTimeMillis() - time;
             maximalTime = Math.max(time, maximalTime);
             String result = writer.getBuffer().toString();
@@ -298,6 +297,8 @@ public class NewTester {
             for (int i = 0; i < count; i++)
                 solve.invoke(solver, i + 1, in, out);
         }
+        // do close work
+        out.getClass().getMethod("close").invoke(out);
     }
 
     private static Collection<? extends Test> addGeneratedTests(String fqn, int initialTestCount)
