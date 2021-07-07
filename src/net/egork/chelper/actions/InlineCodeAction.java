@@ -7,6 +7,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.util.FileContentUtil;
 import net.egork.chelper.codegeneration.SolutionGenerator;
 import net.egork.chelper.util.ExecuteUtils;
 import net.egork.chelper.util.FileUtilities;
@@ -15,6 +16,7 @@ import net.egork.chelper.util.Utilities;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Collections;
 
 /**
  * @author egor@egork.net
@@ -22,6 +24,8 @@ import java.nio.charset.Charset;
 public class InlineCodeAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
+        FileContentUtil.reparseFiles(e.getProject(), Collections.singleton(e.getProject().getBaseDir()), true);
+
         DataContext dataContext = e.getDataContext();
         PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
         if (element instanceof PsiFile) {

@@ -10,6 +10,7 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.FileContentUtil;
 import net.egork.chelper.task.*;
 import net.egork.chelper.util.FileUtilities;
 import net.egork.chelper.util.Messenger;
@@ -577,6 +578,8 @@ public class SolutionGenerator {
     public static void createSourceFile(final Task task, final Project project) {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
+                FileContentUtil.reparseFiles(project, Collections.singleton(project.getBaseDir()), true);
+
                 String outputDirectory = Utilities.getData(project).outputDirectory;
                 VirtualFile directory = FileUtilities.createDirectoryIfMissing(project, outputDirectory);
                 if (directory == null) {
@@ -632,6 +635,8 @@ public class SolutionGenerator {
     public static void createSourceFile(final Project project, final TopCoderTask task) {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             public void run() {
+                FileContentUtil.reparseFiles(project, Collections.singleton(project.getBaseDir()), true);
+
                 SolutionGenerator generator = new SolutionGenerator(
                         new HashSet<String>(Arrays.asList(Utilities.getData(project).excludedPackages)),
                         new MainFileTemplate("%IMPORTS%\npublic %INLINED_SOURCE%", Collections.<PsiElement>emptySet(),

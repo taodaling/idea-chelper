@@ -38,7 +38,7 @@ public class MainFileTemplate extends Template {
     }
 
     public static PsiClass getClass(Project project, String fqn) {
-        FileContentUtil.reparseFiles(project, Collections.singleton(project.getBaseDir()), true);
+        //FileContentUtil.reparseFiles(project, Collections.singleton(project.getBaseDir()), true);
         return JavaPsiFacade.getInstance(project).findClass(fqn, GlobalSearchScope.allScope(project));
     }
 
