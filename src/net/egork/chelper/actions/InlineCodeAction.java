@@ -24,8 +24,6 @@ import java.util.Collections;
 public class InlineCodeAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
-        FileContentUtil.reparseFiles(e.getProject(), Collections.singleton(e.getProject().getBaseDir()), true);
-
         DataContext dataContext = e.getDataContext();
         PsiElement element = dataContext.getData(LangDataKeys.PSI_ELEMENT);
         if (element instanceof PsiFile) {

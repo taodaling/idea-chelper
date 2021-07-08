@@ -179,21 +179,6 @@ public class Utilities {
         return center;
     }
 
-    public static RunnerAndConfigurationSettings createConfiguration(Task task, boolean setActive, Project project) {
-        RunManagerImpl manager = RunManagerImpl.getInstanceImpl(project);
-        RunnerAndConfigurationSettings old = manager.findConfigurationByName(task.name);
-        if (old != null) {
-            manager.removeConfiguration(old);
-        }
-        RunnerAndConfigurationSettingsImpl configuration = new RunnerAndConfigurationSettingsImpl(manager,
-                new TaskConfiguration(task.name, project, task,
-                        TaskConfigurationType.INSTANCE.getConfigurationFactories()[0]), false);
-        manager.addConfiguration(configuration, false);
-        if (setActive) {
-            manager.setActiveConfiguration(configuration);
-        }
-        return configuration;
-    }
 
     public static Parser getDefaultParser() {
         return defaultParser;
@@ -221,11 +206,27 @@ public class Utilities {
         }
     }
 
+    public static RunnerAndConfigurationSettings createConfiguration(Task task, boolean setActive, Project project) {
+        RunManagerImpl manager = RunManagerImpl.getInstanceImpl(project);
+        RunnerAndConfigurationSettings old = manager.findConfigurationByName(task.name);
+        if (old != null) {
+            return old;
+        }
+        RunnerAndConfigurationSettingsImpl configuration = new RunnerAndConfigurationSettingsImpl(manager,
+            new TaskConfiguration(task.name, project, task,
+                TaskConfigurationType.INSTANCE.getConfigurationFactories()[0]), false);
+        manager.addConfiguration(configuration, false);
+        if (setActive) {
+            manager.setActiveConfiguration(configuration);
+        }
+        return configuration;
+    }
+
     public static RunnerAndConfigurationSettings createConfiguration(TopCoderTask task, boolean setActive, Project project) {
         RunManagerImpl manager = RunManagerImpl.getInstanceImpl(project);
         RunnerAndConfigurationSettings old = manager.findConfigurationByName(task.name);
         if (old != null) {
-            manager.removeConfiguration(old);
+            return old;
         }
         RunnerAndConfigurationSettingsImpl configuration = new RunnerAndConfigurationSettingsImpl(manager,
                 new TopCoderConfiguration(task.name, project, task,
